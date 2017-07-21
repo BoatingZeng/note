@@ -19,3 +19,13 @@
 
 ## jsAPI的用法
 1. `collection.find().toArray(function (err, results){});`，要用`toArray`，`results`才是结果集的数组。
+
+## mongoose
+* `mongoose.createConnection`用于创建多个连接，经过测试，直接用`mongoose.connect`好像是会复写原本的连接的。
+* 设置`useMongoClient`选项，返回一个promise
+```js
+var promise = mongoose.createConnection('mongodb://localhost/myapp', {
+  useMongoClient: true,
+  /* other options */
+});
+```
