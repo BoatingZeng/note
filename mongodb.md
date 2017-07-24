@@ -29,3 +29,15 @@ var promise = mongoose.createConnection('mongodb://localhost/myapp', {
   /* other options */
 });
 ```
+
+## sort、skip、limit
+
+下面两句是一样的，都是先执行`sort`
+
+```js
+db.nums.find().skip(1).limit(3).sort({x: -1});
+```
+
+```js
+db.nums.find().sort({x: -1}).skip(1).limit(3);
+```
