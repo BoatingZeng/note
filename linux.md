@@ -16,3 +16,8 @@ svn为例：
 ## 亮度
 sudo su
 echo 50 > /sys/class/backlight/intel_backlight/brightness
+
+## 添加PATH
+编辑/etc/profile，末尾添加
+export PATH=$PATH:/home/boating/program/node-v8.1.3-linux-x64/bin
+等号两边不能有空格，如果要立刻生效，执行source profile
