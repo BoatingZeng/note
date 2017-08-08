@@ -43,3 +43,6 @@ app.use(async (ctx, next) => {
     if(parseInt(ctx.response.status) === 404) ctx.response.body = 'my 404';
 });
 ```
+
+## Promise
+nodejs原生的Promise，UnhandledPromiseRejectionWarning的打印不详细，不具体到哪个文件哪一行，所以使用bluebird会更好。使用Promise是，当你then里出现错误时，就会报UnhandledPromiseRejectionWarning。
