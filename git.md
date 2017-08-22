@@ -13,3 +13,5 @@ git pull origin master
 ```
 
 **unset GIT_DIR 这句不能省略**
+
+## 在vscode里使用
