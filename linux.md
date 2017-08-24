@@ -21,3 +21,9 @@ echo 50 > /sys/class/backlight/intel_backlight/brightness
 编辑/etc/profile，末尾添加
 export PATH=$PATH:/home/boating/program/node-v8.1.3-linux-x64/bin
 等号两边不能有空格，如果要立刻生效，执行source profile
+
+## 挂载windows共享文件夹
+sudo apt-get install samba
+sudo  apt-get install cifs-utils
+
+sudo mount.cifs //192.168.18.102/photoscanTasks  ~/share/win10/test -o username=boating,password=boating,uid=1000,gid=1000
