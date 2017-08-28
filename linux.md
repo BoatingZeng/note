@@ -26,4 +26,11 @@ export PATH=$PATH:/home/boating/program/node-v8.1.3-linux-x64/bin
 sudo apt-get install samba
 sudo  apt-get install cifs-utils
 
+uid和gid可以用id username来查
+
 sudo mount.cifs //192.168.18.102/photoscanTasks  ~/share/win10/test -o username=boating,password=boating,uid=1000,gid=1000
+
+强行umount
+
+umount -l /PATH/OF/BUSY-DEVICE
+umount -f /PATH/OF/BUSY-NFS(NETWORK-FILE-SYSTEM)
