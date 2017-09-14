@@ -27,3 +27,10 @@ int main()
     return 0;
 }
 ```
+
+# const
+
+## 指针使用const
+1. 指针本身是常量不可变(const修饰指针本身)：`char * const pContent;`
+2. 指针所指向的内容是常量不可变(const修饰所指变量)：`const char * pContent;`
+3. 两者都不可变：`const char * const pContent;`
