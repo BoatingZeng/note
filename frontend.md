@@ -11,7 +11,7 @@
 2. 空格，表示后代(包括后代的后代)，多次空格，则是指定后代的后代
 3. >，表示直接后代，多个>，则是直接后代的直接后代
 4. +，表示同辈的后一个元素。p+p:与前一个p同辈的后一个p。
-5. ~，选择同辈的后面的所有元素。p~p，与前p同辈的后面所有p。
+5.  ~ ，选择同辈的后面的所有元素。p~p，与前p同辈的后面所有p。
 
 # Vue
 
@@ -27,7 +27,7 @@
 
 ## 问题
 * UglifyJs好像不支持es6，用typescript的es6选项时，uglify会出错。vue-cli默认就开了babel-loader。
-* error TS2686: 'XXX' refers to a UMD global, but the current file is a module. Consider adding an import instead。想把THREE作为全局使用，但是在编译时会出现这样的问题。***暂时设置ts-loader的happyPackMode来解决***
+* error TS2686: 'XXX' refers to a UMD global, but the current file is a module. Consider adding an import instead。想把THREE作为全局使用，但是在编译时会出现这样的问题。**暂时设置ts-loader的happyPackMode来解决**
 * sass模块的引用，当使用alias时，要在设定的alias前面加~。也就是说用alias时，要以~开头。
 
 ## 模块的引用
