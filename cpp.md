@@ -45,7 +45,7 @@ int main()
 
 ## 指针使用const
 1. 指针本身是常量不可变(const修饰指针本身)：`char * const pContent;`
-2. 指针所指向的内容是常量不可变(const修饰所指变量)：`const char * pContent;`
+2. 指针所指向的内容是常量不可变，并不是说所指向的值是个常量，而是对指针而言，这个值是常量不可变，即不可以用这个指针改变这个值(const修饰所指变量)：`const char * pContent;`
 3. 两者都不可变：`const char * const pContent;`
 
 # 模版
