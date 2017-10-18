@@ -80,6 +80,10 @@ template class Test<int>; //显式实例化
 
 Test类的声明和定义不在同一个文件，如果没有Example.cpp最后一句的显式实例化，会出错。在编译Example.cpp时，编译器根本不知道在main.cpp中使用了`Test<int>`类（因为编译是各个文件独立进行的），也就没有实例化它。
 
+# 智能指针
+1. auto_ptr和unique_ptr在赋值时会转让所有权，导致原本的指针不再指向那个内存。当把一个unique_ptr赋给另一个时，如果源unique_ptr是个临时右值，编译器允许这样做；如果源unique_ptr将存在一段时间，编译器将禁止。(C++ Primer Plus(第六版) P673)
+2. auto_ptr和shared_ptr只能用new，而unique_ptr可以用new[];
+
 # 不归类问题集合
 
 ## 返回函数的局部变量的引用或指针会出问题
