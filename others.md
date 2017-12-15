@@ -33,3 +33,66 @@
     }
 }
 ```
+
+# 机器学习
+
+## 准确率、召回率、F1-score
+对于数据测试结果有下面4种情况：
+
+table   | 预测为正 | 预测为负
+--------|----------|--------
+实则为正 |   TP     |   FN
+实则为负 |   FP     |   TN
+
+* 准确率：P = TP/(TP+FP)，就是预测为正的有多少(百分比)是正，分母是上表第一列求和
+* 召回率：R = TP/(TP+FN)，就是真实是正的预测出多少(百分比)，分母是上表第一行求和
+* F1-score：F = 2PR/(P+R)
+
+### 对于分词
+
+分词问题转化为位置标注问题(通常是B、M、E、S标注)，所以评价就是通过标注的准确性来评价，每种标注都可以单独算出准确率和召回率，单独考虑每种标注，就可以套上面的公式了。下面是一个简化的测试文本(没有M标注)。第二列是正确答案，第三列是预测答案。看下面计算过程的注释部分。
+
+```txt
+这  S  S
+是  S  S
+一  B  B
+个  E  E
+测  B  S
+试  E  S
+文  B  B
+本  E  E
+```
+
+```python
+import pandas
+line=[]
+file=open('./result.txt','r',encoding='utf-8')
+for i in file.readlines():
+    i=i[0:-1]
+    if len(i)!=0 and len(i)!=1:
+        line.append(i.split())
+df=pandas.DataFrame(line,columns=['character','train','test'])
+
+print(df)
+
+correct=df[df.train==df.test]
+
+print(correct)
+
+for i in ('B','E','S'):
+    # 分别对B、E、S计算，下面以B为例注释
+    # 分子：你预测到的而且是正确的B。分母：你预测到的全部B，就是上表的第一列求和。
+    P=sum(correct.test==i)/sum(df.test==i)
+    # 分子：一样。分母：正确答案里所有的B，就是上表的第一行求和。
+    R=sum(correct.test==i)/sum(df.train==i)
+    F=R*P*2/(R+P)
+    print(i,':\n','P=',P,' R=',R,' F=',F)
+```
+
+计算结果：
+
+table |  P  |  R  |  F
+------|-----|-----|-----
+B     | 1.0 |0.667| 0.8
+E     | 1.0 |0.667| 0.8
+S     | 0.5 | 1.0 | 0.667
