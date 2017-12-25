@@ -196,3 +196,11 @@ func8 = if (output = I and feature="U02:聞") return 1 else return 0
 ```
 
 上面的这些讨论，可以用来理解ltp的特征和模型文件的格式。当然，ltp的特征函数的形式，可能是更加复杂的。CRF++的模型里，是先把特征都列出来，再列出每个特征的权值，而ltp的模型里，权值就写在特征后面。
+
+**ltp里特征裁剪参数rare-feature-threshold的说明**
+
+原文：rare-feature-threshold：模型裁剪力度，如果rare-feature-threshold为0，则只去掉为0的特征；rare-feature-threshold；如果大于0时将进一步去掉更新次数低于阈值的特征。
+
+特别说明当rare-feature-threshold为0的时候，是去掉**特征权值全部为0**的特征(这里说的全部，对于分词来说，一般是4，因为有4个标注)。ltp所提及的论文里说这个特征剪裁方法，跟单纯的根据特征出现次数来剪裁特征，是不同的。也就是说，特征的出现次数不等价于更新次数，细节要研究特征是怎样更新的。
+
+另外，设置rare-feature-threshold大于0不会让训练更快，理解剪裁的工作机制就知道原因了。(相当于最后出模型的时候，根据rare-feature-threshold来选择性导出模型的哪些部分)
