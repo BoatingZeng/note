@@ -17,3 +17,6 @@ sorted(d.iteritems(), key=operator.itemgetter(1))
 # 返回一个list，按照d的value排序，默认是从小到大排
 # [('Bob', 75), ('Tracy', 85), ('Michael', 95)]
 ```
+
+# pip源
+-i https://mirrors.aliyun.com/pypi/simple/
