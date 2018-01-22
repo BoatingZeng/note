@@ -18,5 +18,14 @@ sorted(d.iteritems(), key=operator.itemgetter(1))
 # [('Bob', 75), ('Tracy', 85), ('Michael', 95)]
 ```
 
+*args：
+表示不定参数，以zip()函数为例，zip()接受不定参数：
+```py
+xyz = [(1, 4, 7), (2, 5, 8), (3, 6, 9)]
+zip(*xyz) == zip((1, 4, 7), (2, 5, 8), (3, 6, 9)) # *号把xyz这个数组拆开成三个参数了
+```
+
+在函数调用中使用*list/tuple的方式表示将list/tuple分开，作为位置参数传递给对应函数（前提是对应函数支持不定个数的位置参数）
+
 # pip源
 -i https://mirrors.aliyun.com/pypi/simple/
