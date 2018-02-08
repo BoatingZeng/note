@@ -81,6 +81,11 @@ x1、x2、xn各有k1、k2、kn个节点。节点命名为xij，i=1~n，j=1~ki。
 
 这篇paper对理解CRF很有帮助：Classical Probabilistic Models and Conditional Random Fields。http://www.eng.utah.edu/~cs6961/papers/klinger-crf-intro.pdf
 
+### 序列标注中的Log Likelihood
+参考参考stanford的Natural Language Processing (almost) from Scratch：https://arxiv.org/pdf/1103.0398v1.pdf
+
+其实跟单个字(词)独立标注类似，单子标注，softmax的分母，是这个字所有可能tag的和。而句子，是整个句子所有可能路径的和。不过在实际计算中，因为所有可能的路径是很多项的，是用了简便的方法(利用log semiring)。
+
 **CRF就是最大熵模型的序列化扩展，是HMM的条件求解**，基本搜到的资料都会这么说，但是看完之后才会明白为什么这样说，还有**生成模型**和**判别模型**的区别。
 
 看完这个，细节上就差特征函数具体怎么操作(不讨论训练的方式或细节)。下面参考CRF++的做法，估计多数实现都是类似的。
