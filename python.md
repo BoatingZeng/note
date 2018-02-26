@@ -29,3 +29,11 @@ zip(*xyz) == zip((1, 4, 7), (2, 5, 8), (3, 6, 9)) # *号把xyz这个数组拆开
 
 # pip源
 -i https://mirrors.aliyun.com/pypi/simple/
+
+# Anaconda镜像
+
+```
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
+conda config --set show_channel_urls yes
+```
