@@ -27,6 +27,31 @@ zip(*xyz) == zip((1, 4, 7), (2, 5, 8), (3, 6, 9)) # *号把xyz这个数组拆开
 
 在函数调用中使用*list/tuple的方式表示将list/tuple分开，作为位置参数传递给对应函数（前提是对应函数支持不定个数的位置参数）
 
+类变量：https://www.jianshu.com/p/3aca78a84def
+
+```py
+class Service(object):
+    data = []
+    def __init__(self, other_data):
+        self.other_data = other_data
+
+s1 = Service(['a', 'b'])
+s2 = Service(['c', 'd'])
+s1.data.append(1)
+
+s1.data
+## [1]
+s2.data
+## [1]
+
+s2.data.append(2)
+
+s1.data
+## [1, 2]
+s2.data
+## [1, 2]
+```
+
 # pip源
 -i https://mirrors.aliyun.com/pypi/simple/
 
