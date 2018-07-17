@@ -62,3 +62,8 @@ conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/f
 conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
 conda config --set show_channel_urls yes
 ```
+
+# 各种库
+
+## Numpy
+* 关于masked array：https://currents.soest.hawaii.edu/ocn_data_analysis/_static/masked_arrays.html
