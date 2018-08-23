@@ -3,6 +3,7 @@
 2.  杀进程：kill -s 9 1827
 3.  查看文件尾：tail file.log -n 300
 4.  后台运行：nohup command &
+5.  复制目录时保持权限等：rsync -a 或 cp -a
 
 ## unbuntu开机启动sh
 svn为例：
