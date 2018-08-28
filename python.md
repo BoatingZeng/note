@@ -67,3 +67,24 @@ conda config --set show_channel_urls yes
 
 ## Numpy
 * 关于masked array：https://currents.soest.hawaii.edu/ocn_data_analysis/_static/masked_arrays.html
+
+## Tensorflow
+
+### GPU控制
+选择使用哪些GPU
+```py
+import os
+os.environ['CUDA_VISIBLE_DEVICES'] = '0' # 多个：'0,1'; 不用GPU：'-1'
+```
+
+控制显存
+```py
+import tensorflow as tf
+config = tf.ConfigProto()
+config.gpu_options.per_process_gpu_memory_fraction = 0.5  # 决定每个可见GPU应分配到的内存占总内存量的比例
+config.gpu_options.allow_growth = True  # 根据运行时的需要来分配GPU内存，这个选项是优先的，设置这个就不用设置per_process_gpu_memory_fraction
+
+# 另外，在keras，需要这样设置全局session
+from keras.backend.tensorflow_backend import set_session
+set_session(tf.Session(config=config))
+```
