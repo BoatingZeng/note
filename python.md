@@ -52,16 +52,31 @@ s2.data
 ## [1, 2]
 ```
 
-# pip源
+# 工具
+
+## pip
+
+### pip源
 -i https://mirrors.aliyun.com/pypi/simple/
 
-# Anaconda镜像
+## conda
+
+### Anaconda镜像
 
 ```
 conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
 conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
 conda config --set show_channel_urls yes
 ```
+
+## conda或pip逐个安装requirenments.txt里的依赖
+```shell
+while read requirement; do conda install --yes $requirement || pip install $requirement; done < requirements.txt
+```
+说明：
+
+* read：读取一行到后面的参数(requirement)
+* <：原本read应该是从标准输入(键盘)读取，用这个可以重定向到requirement.txt文件
 
 # 各种库
 
