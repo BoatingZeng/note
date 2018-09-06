@@ -83,6 +83,36 @@ while read requirement; do conda install --yes $requirement || pip install $requ
 ## Numpy
 * 关于masked array：https://currents.soest.hawaii.edu/ocn_data_analysis/_static/masked_arrays.html
 
+## matplotlib
+基本操作
+```py
+plt.plot(x, y, color='red', label='label')
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Some extension of Receiver operating characteristic to multi-class')
+plt.legend(loc="lower right")
+```
+
+日期做横坐标
+```py
+from datetime import datetime
+
+import matplotlib.dates as mdates
+import matplotlib.pyplot as plt
+
+# 生成横纵坐标信息
+dates = ['01/02/1991', '01/03/1991', '01/04/1991']
+xs = [datetime.strptime(d, '%m/%d/%Y').date() for d in dates]
+ys = range(len(xs))
+# 配置横坐标
+plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%m/%d/%Y'))
+plt.gca().xaxis.set_major_locator(mdates.DayLocator())
+# Plot
+plt.plot(xs, ys)
+plt.gcf().autofmt_xdate()  # 自动旋转日期标记
+plt.show()
+```
+
 ## Tensorflow
 
 ### GPU控制
