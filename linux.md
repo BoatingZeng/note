@@ -36,3 +36,10 @@ sudo mount.cifs //192.168.18.102/photoscanTasks  ~/share/win10/test -o username=
 
 umount -l /PATH/OF/BUSY-DEVICE
 umount -f /PATH/OF/BUSY-NFS(NETWORK-FILE-SYSTEM)
+
+## 挂载ftp
+```
+sudo apt-get install curlftpfs
+mkdir /mnt/my_ftp
+curlftpfs ftp-user:ftp-pass@host:port /mnt/my_ftp/
+```
