@@ -46,3 +46,56 @@ app.use(async (ctx, next) => {
 
 ## Promise
 nodejs原生的Promise，UnhandledPromiseRejectionWarning的打印不详细，不具体到哪个文件哪一行，所以使用bluebird会更好。使用Promise是，当你then里出现错误时，就会报UnhandledPromiseRejectionWarning。
+
+## sequelize
+这个库的坑很多，记得保持更新。旧版本遇到一个bug，设置unique就给你创建两个一样的唯一索引。
+
+### associations用例
+
+belongsTo和hasMany。下面的例子理解为，一个company有很多个user，但是user只属于一个company。
+
+```js
+// 定义User模型
+var User = sequelize.define('user', {
+	id:{type: Sequelize.BIGINT(11), autoIncrement:true, primaryKey : true },
+	name: { type: Sequelize.STRING },
+	sex: { type: Sequelize.INTEGER, allowNull: false, defaultValue: 0 },
+	isManager: { type: Sequelize.BOOLEAN, field: 'is_manager', allowNull: false, defaultValue: false }
+});
+
+// 定义Company模型
+var Company = sequelize.define('company', {
+	id:{ type:Sequelize.BIGINT(11), autoIncrement:true, primaryKey : true },
+	name: { type: Sequelize.STRING, unique: true, allowNull: false }
+});
+
+// 定义User-Company关联关系
+User.belongsTo(Company, {as: 'company', foreignKey: 'company_name', targetKey: 'name'});
+Company.hasMany(User, { as: 'users', foreignKey:'company_name', sourceKey: 'name'});
+```
+
+foreignKey是建立外键的那个表的字段，这个字段不需要在define里创建，定义association时会给你创建。在belongsTo和hasMany里，targetKey或者sourceKey是指被指向的表里的字段，这里指向的就是company表的name字段。
+
+关于hasOne，目前版本4.42.0，它没有sourceKey选项，所以hasOne只能用主键，github上说5.0.0版本后支持sourceKey选项。
+
+同步后会得到下面的表
+
+```sql
+CREATE TABLE `company` (
+  `id` bigint(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `user` (
+  `id` bigint(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `sex` int(11) NOT NULL DEFAULT '0',
+  `is_manager` tinyint(1) NOT NULL DEFAULT '0',
+  `company_name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `company_name` (`company_name`),
+  CONSTRAINT `user_ibfk_1` FOREIGN KEY (`company_name`) REFERENCES `company` (`name`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+```

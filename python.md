@@ -80,6 +80,9 @@ while read requirement; do conda install --yes $requirement || pip install $requ
 
 # 各种库
 
+## pyecharts
+* python端生成简单的图表(html)：https://github.com/pyecharts/pyecharts
+
 ## Numpy
 * 关于masked array：https://currents.soest.hawaii.edu/ocn_data_analysis/_static/masked_arrays.html
 
