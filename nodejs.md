@@ -51,6 +51,10 @@ nodejs原生的Promise，UnhandledPromiseRejectionWarning的打印不详细，�
 这个库的坑很多，记得保持更新。旧版本遇到一个bug，设置unique就给你创建两个一样的唯一索引。
 
 ### associations用例
+* https://itbilu.com/nodejs/npm/EkWJSmmFf.html
+* https://lorenstewart.me/2016/09/12/sequelize-table-associations-joins/
+* https://github.com/josie11/Sequelize-Association-Example
+* https://grokonez.com/node-js/sequelize-one-to-many-association-nodejs-express-mysql
 
 belongsTo和hasMany。下面的例子理解为，一个company有很多个user，但是user只属于一个company。
 
@@ -99,3 +103,8 @@ CREATE TABLE `user` (
   CONSTRAINT `user_ibfk_1` FOREIGN KEY (`company_name`) REFERENCES `company` (`name`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
+
+## egg
+
+### 日志的问题
+* https://www.jianshu.com/p/919f3e288e5a
