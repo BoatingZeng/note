@@ -44,9 +44,6 @@ app.use(async (ctx, next) => {
 });
 ```
 
-## Promise
-nodejs原生的Promise，UnhandledPromiseRejectionWarning的打印不详细，不具体到哪个文件哪一行，所以使用bluebird会更好。使用Promise是，当你then里出现错误时，就会报UnhandledPromiseRejectionWarning。
-
 ## sequelize
 这个库的坑很多，记得保持更新。旧版本遇到一个bug，设置unique就给你创建两个一样的唯一索引。
 
@@ -55,6 +52,8 @@ nodejs原生的Promise，UnhandledPromiseRejectionWarning的打印不详细，�
 * https://lorenstewart.me/2016/09/12/sequelize-table-associations-joins/
 * https://github.com/josie11/Sequelize-Association-Example
 * https://grokonez.com/node-js/sequelize-one-to-many-association-nodejs-express-mysql
+
+sequelize外键指向的键，最好使用主键，因为有几个关联关系都只支持指向主键（原因是设置里不支持targetKey和sourceKey），比如belongsToMany。
 
 belongsTo和hasMany。下面的例子理解为，一个company有很多个user，但是user只属于一个company。
 
@@ -76,9 +75,26 @@ var Company = sequelize.define('company', {
 // 定义User-Company关联关系
 User.belongsTo(Company, {as: 'company', foreignKey: 'company_name', targetKey: 'name'});
 Company.hasMany(User, { as: 'users', foreignKey:'company_name', sourceKey: 'name'});
+
+// 如果上面有定义关联，这样直接使用关联
+var include = [{
+	model: Company,
+	as: 'company'
+}];
+
+// 如果上面没有定义关联，临时定义关联
+var include = [{
+	association: User.belongsTo(Company, {foreignKey:'company_name', as: 'company', targetKey: 'name'})
+}];
+
+User.findOne({include:include}).then((result) => {
+	console.log(result.name + ' 是 '+result.company.name+' 的员工');
+}).catch((err) => {
+	console.error(err);
+});
 ```
 
-foreignKey是建立外键的那个表的字段，这个字段不需要在define里创建，定义association时会给你创建。在belongsTo和hasMany里，targetKey或者sourceKey是指被指向的表里的字段，这里指向的就是company表的name字段。
+foreignKey是建立外键的那个表的字段，这个字段不需要在define里创建，定义association时会给你创建。在belongsTo和hasMany里，targetKey或者sourceKey是指被指向的表里的字段，这里指向的就是company表的name字段。如果不定义，默认就是主键。
 
 关于hasOne，目前版本4.42.0，它没有sourceKey选项，所以hasOne只能用主键，github上说5.0.0版本后支持sourceKey选项。
 
@@ -102,6 +118,37 @@ CREATE TABLE `user` (
   KEY `company_name` (`company_name`),
   CONSTRAINT `user_ibfk_1` FOREIGN KEY (`company_name`) REFERENCES `company` (`name`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+```
+
+### transaction
+
+配合async函数就变得很直观了
+
+```js
+// 这个函数模拟一个异步错误
+function throw_err(){
+  return new Promise(function(resolve, reject){
+    setTimeout(function(){
+      reject(new Error('fake error'));
+    }, 1000);
+  });
+}
+
+async function query_in_transaction(){
+  let transaction
+  try {
+    transaction = await sequelize.transaction(); // 默认就是{ autocommit: false }
+    await User.create({name:'张三', sex:1, isManager: true}, {transaction});
+    await User.create({name:'李三', sex:1}, {transaction});
+    // await throw_err(); // 这里可以测试中途出错rollback
+    await transaction.commit();
+  } catch(e){
+    console.log(e);
+    await transaction.rollback();
+  }
+}
+
+query_in_transaction();
 ```
 
 ## egg
