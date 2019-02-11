@@ -53,9 +53,27 @@ app.use(async (ctx, next) => {
 * https://github.com/josie11/Sequelize-Association-Example
 * https://grokonez.com/node-js/sequelize-one-to-many-association-nodejs-express-mysql
 
+下面的例子都用这样的设定，主要是不带timestamps和version，并且freezeTableName固定表名
+```js
+const Sequelize = require('sequelize');
+
+// 创建 sequelize 实例
+const sequelize = new Sequelize('test', 'root', 'mysqlboating', {
+  host: 'localhost',
+  port: 3306,
+  dialect: 'mysql',
+
+  define: {
+    timestamps: false,
+    version: false,
+    freezeTableName: true
+  }
+});
+```
+
 sequelize外键指向的键，最好使用主键，因为有几个关联关系都只支持指向主键（原因是设置里不支持targetKey和sourceKey），比如belongsToMany。
 
-belongsTo和hasMany。下面的例子理解为，一个company有很多个user，但是user只属于一个company。
+**belongsTo**和**hasMany**。下面的例子理解为，一个company有很多个user，但是user只属于一个company。
 
 ```js
 // 定义User模型
@@ -118,6 +136,79 @@ CREATE TABLE `user` (
   KEY `company_name` (`company_name`),
   CONSTRAINT `user_ibfk_1` FOREIGN KEY (`company_name`) REFERENCES `company` (`name`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+```
+
+**belongsToMany**的例子，下面的例子表示一个order包含很多个product，同时一个product也会出现在不同order里。
+
+```js
+var Product = sequelize.define('product', {
+  id: { type: Sequelize.INTEGER, autoIncrement:true, primaryKey : true },
+  name: Sequelize.STRING
+});
+
+var Order = sequelize.define('order', {
+  id: { type: Sequelize.INTEGER, autoIncrement:true, primaryKey : true }
+});
+
+// 这个关联表的模型最好还是自己手动定义，例如要在这里添加主键，或者其他信息
+var OrderProduct = sequelize.define('order_product', {
+  id: { type: Sequelize.INTEGER, autoIncrement:true, primaryKey : true },
+  quantity: Sequelize.INTEGER
+});
+
+Order.belongsToMany(Product, {
+  through: model: 'order_product',
+  foreignKey: 'order_id',
+  // otherKey: 'product_id', // 这个一般不用写，Product.belongsToMany里的foreignKey和这个等价的
+  as: 'product' // 这里填的是Product这个目标模型的别名!!!保险起见用下面那种as的定义形式。
+});
+
+Product.belongsToMany(Order, {
+  through: model: 'order_product',
+  foreignKey: 'product_id',
+  // otherKey: 'order_id', // 这个一般不用写，Order.belongsToMany里的foreignKey和这个等价的
+  as: {
+    plural: 'order', // 这里填的是Order这个目标模型的别名!!!
+    singular: 'order' // 因为不习惯复数形式，所以干脆显式定义单复数形式一样
+  }
+});
+```
+
+同步后得到下面的表
+
+```sql
+CREATE TABLE `order` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `product` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `order_product` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `quantity` int(11) DEFAULT NULL,
+  `order_id` int(11) DEFAULT NULL,
+  `product_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `order_product_product_id_order_id_unique` (`order_id`,`product_id`),
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `order_product_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `order_product_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+```
+
+往关联表添加关联的用例
+```js
+async function main(){
+  await Order.create({}); // 创建一个order，这里也可以用include
+  await Product.create({name: '代码创建'}); // 创建一个product
+  let order = await Order.findOne({include: {model: Product, as: 'product'}}); // 查一个order，并且把它的product查出来，注意这里as和上面定义的一致
+  await order.addProduct(1, {through: {quantity: 10}}); // 往刚才查出来的order上面添加product，addProduct是由关联创建的函数，参数里的1是指添加的product的id，它会先select检查这个order有没有这个product，没有才会添加
+}
 ```
 
 ### transaction
