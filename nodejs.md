@@ -48,6 +48,8 @@ app.use(async (ctx, next) => {
 这个库的坑很多，记得保持更新。旧版本遇到一个bug，设置unique就给你创建两个一样的唯一索引。
 
 ### associations用例
+**实际上一般很少使用外键，所以在数据库里应该把外键约束去掉，模型里保留这个关联。不过sequelize把关联和约束混在一起，让人有点困惑，只看模型的话，可能会让人以为这里建立了外键约束，但实际上我们只是想定义关联。**
+
 * https://itbilu.com/nodejs/npm/EkWJSmmFf.html
 * https://lorenstewart.me/2016/09/12/sequelize-table-associations-joins/
 * https://github.com/josie11/Sequelize-Association-Example
