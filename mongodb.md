@@ -45,7 +45,7 @@ db.nums.find().sort({x: -1}).skip(1).limit(3);
 ## 数据dump和restore
 mongodump -h 127.0.0.1:27017 -d [db_name] -o ./mongodump
 
-mongorestore -h 127.0.0.1:27017 -d [db_name] --directoryperdb ./mongodump/[db_name]
+mongorestore -h 127.0.0.1:27017 -d [db_name] ./mongodump/[db_name]
 
 ## 修改MongoDB默认数据存储路径
 https://www.2cto.com/database/201707/658900.html
