@@ -14,6 +14,8 @@ http://blog.csdn.net/wolinxuebin/article/details/7845917
 3. `IFNULL(fieldName, value)`，如果这个`fieldName`字段的值是`null`，则用`value`代替
 4. `DATE_FORMAT(date, format)`，格式化时间。
 5. `COUNT()`，`COUNT(column_name)`会计数`column_name`不为`NULL`的行，`COUNT(*)`会计数所有行。
+6. `REPEAT('a', 3) = 'aaa' `; 重复字符串
+7. `LENGTH('aaa') = 3`; 计算字符串长度
 
 ## 导出导入
 

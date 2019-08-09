@@ -33,3 +33,19 @@
     }
 }
 ```
+
+# markdown
+
+## 表格模板
+|HTTP Status Code|error_msg |备注   |
+|:--------------:|:--------:|:-----:|
+|200|无||
+|400|userId或missionCode参数为空||
+|500|服务器内部错误||
+
+|参数名 |说明   |可为空 |备注   |
+|:-----:|:-----:|:-----:|:-----:|
+|userId|用户id|否||
+|missionCode|任务代号|否||
+|missionStartDate|任务开始日期(格式YYYY-MM-DD)|否||
+|isVIP|是不是VIP，只有为1的时候认为是vip|是||

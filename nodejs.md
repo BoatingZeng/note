@@ -1,5 +1,22 @@
 # nodejs
 
+## 安装
+```
+curl --silent --location https://rpm.nodesource.com/setup_10.x | bash -
+```
+
+```
+yum install -y nodejs
+```
+
+```
+curl -sL https://dl.yarnpkg.com/rpm/yarn.repo | sudo tee /etc/yum.repos.d/yarn.repo
+```
+
+```
+yum install yarn
+```
+
 ## pm2
 
 传入参数
